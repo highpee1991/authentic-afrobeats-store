@@ -77,10 +77,10 @@ const ProductPage = ({ queryKey, queryFn, title }) => {
     <ProductWrapper>
       <Title>{title}</Title>
       <ProductContainer>
-        {currentItems.map((wears) => (
-          <Link to={`/products/${wears.id}`} key={wears.id}>
-            <ProductList product={wears} />
-          </Link>
+        {currentItems.map((item) => (
+          // <Link to={`/products/${item.id}`} key={item.id}>
+          <ProductList product={item} />
+          // </Link>
         ))}
       </ProductContainer>
 

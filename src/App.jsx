@@ -23,8 +23,10 @@ import PageNotFound from "./components/pages/PageNotFound";
 import Layout from "./components/layouts/Layout";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import ProductDetails from "./components/ui/shared/productPage/ProductDetails";
+import ProductDetails from "./components/ui/shared/productdetails/ProductDetails";
 import BlogDetails from "./components/ui/blog/BlogDetails";
+import Cart from "./components/ui/cart/Cart";
+import { WearsProductdetail } from "./components/ui/shared/productdetails/AllProductDetails";
 
 const App = () => {
   const queryClient = new QueryClient({
@@ -68,8 +70,12 @@ const App = () => {
             <Route path='about' element={<About />} />
             <Route path='blog' element={<Blog />} />
             <Route path='contact' element={<Contact />} />
-            <Route path='products/:productId' element={<ProductDetails />} />
+            <Route
+              path='products/:productId'
+              element={<WearsProductdetail />}
+            />
             <Route path='blogs/:blogId' element={<BlogDetails />} />
+            <Route path='/cart' element={<Cart />} />
             <Route path='*' element={<PageNotFound />} />
           </Route>
         </Routes>

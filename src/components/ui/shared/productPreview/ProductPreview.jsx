@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Button from "../button/Button";
 import { formatCurrency } from "../../../../utils/helpers";
+import AddToCartButton from "../../cart/AddToCartButton";
 
 const CategoryPreviewWrapper = styled.div`
   margin: 2rem;
@@ -16,19 +17,20 @@ const ProductList = styled.div`
 
 const ProductCard = styled.div`
   flex: 0 0 200px;
-  cursor: pointer;
   border-radius: var(--border-radius-md);
   box-shadow: var(--shadow-md);
   padding: 2px;
-  img {
-    width: 100%;
-    height: auto;
-    border-radius: var(--border-radius-md);
-  }
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   &:hover {
     box-shadow: var(--shadow-lg);
     border: 1px solid var(--color-brand-600);
   }
+`;
+
+const ImageWrapper = styled.div`
+  cursor: pointer;
 `;
 
 const Price = styled.div`
@@ -49,12 +51,8 @@ const Price = styled.div`
 `;
 
 const Title = styled.h2`
-  /* text-transform: uppercase; */
   margin-bottom: 2rem;
   color: var(--color-brand-900);
-  /* font-size: 2rem; */
-  /* text-transform: uppercase; */
-  /* font-weight: bold; */
 
   @media (min-width: 768px) {
     font-size: 2.5rem;
@@ -65,6 +63,7 @@ const ProductName = styled.div`
   font-size: 1.5rem;
   font-weight: bold;
   color: var(--color-grey-900);
+  cursor: pointer;
 `;
 
 const ProductPreview = ({ title, products, categoryPath, limit = 4 }) => {
@@ -83,12 +82,13 @@ const ProductPreview = ({ title, products, categoryPath, limit = 4 }) => {
       <Title>{title}</Title>
       <ProductList>
         {products.slice(0, limit).map((product) => (
-          <ProductCard
-            key={product.id}
-            onClick={() => handleProductClick(product.id)}
-          >
-            <img src={product.img1} alt='product.name' />
-            <ProductName>{product.name}</ProductName>
+          <ProductCard key={product.id}>
+            <ImageWrapper onClick={() => handleProductClick(product.id)}>
+              <img src={product.img1} alt={product.name} />
+            </ImageWrapper>
+            <ProductName onClick={() => handleProductClick(product.id)}>
+              {product.name}
+            </ProductName>
             <Price>
               {product.discount_price ? (
                 <>
@@ -101,6 +101,7 @@ const ProductPreview = ({ title, products, categoryPath, limit = 4 }) => {
                 <span>{formatCurrency(product.price)}</span>
               )}
             </Price>
+            <AddToCartButton item={product} />
           </ProductCard>
         ))}
       </ProductList>

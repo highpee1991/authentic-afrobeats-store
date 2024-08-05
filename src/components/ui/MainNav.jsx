@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { FaBars, FaTimes, FaCaretDown, FaSearch } from "react-icons/fa";
-import { NavLink, useLocation } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import styled from "styled-components";
+import CartIcon from "./cart/CartIcon";
 
 const HeaderStyle = styled.header`
   padding: 0.8rem;
@@ -249,6 +250,15 @@ const IconInputStyle = styled.span`
   }
 `;
 
+const CartIconStyle = styled.header`
+  color: var(--color-grey-400);
+  padding-left: 1rem;
+
+  &:hover {
+    color: var(--color-brand-600);
+  }
+`;
+
 const MainNav = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -377,6 +387,11 @@ const MainNav = () => {
             </li>
           </NavList>
         </nav>
+        <CartIconStyle>
+          <Link to='/cart'>
+            <CartIcon />
+          </Link>
+        </CartIconStyle>
         <SearchContainer>
           <SearchIconStyle onClick={() => setSearch(!search)}>
             <FaSearch />

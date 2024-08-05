@@ -1,15 +1,18 @@
 import React from "react";
 import styled from "styled-components";
 import { formatCurrency } from "../../../../utils/helpers";
+import { Link } from "react-router-dom";
+import AddToCartButton from "../../cart/AddToCartButton";
 
 const Card = styled.div`
   background-color: var(--color-grey-50);
   border-radius: var(--border-radius-md);
   overflow: hidden;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
   transition: transform 0.3s, box-shadow 0.3s;
   max-width: 250px;
   margin: auto;
+  box-shadow: var(--shadow-md);
+  padding: 2rem;
 
   &:hover {
     box-shadow: 0 2px 3px rgba(0, 0, 0, 0.5);
@@ -64,15 +67,21 @@ const Price = styled.div`
   }
 `;
 
+const ButtonWrap = styled.div`
+  flex-wrap: wrap;
+`;
+
 const ProductList = ({ product }) => {
   const { img1, name, price, discount_price } = product;
   return (
     <Card>
-      <ImageContainer>
-        <img src={img1} alt={name} />
-      </ImageContainer>
-      <Content>
+      <Link to={`/products/${product.id}`} key={product.id}>
+        <ImageContainer>
+          <img src={img1} alt={name} />
+        </ImageContainer>
         <Title>{name}</Title>
+      </Link>
+      <Content>
         <Price>
           {discount_price ? (
             <>
@@ -84,6 +93,9 @@ const ProductList = ({ product }) => {
           )}
         </Price>
       </Content>
+      <ButtonWrap>
+        <AddToCartButton item={product} />
+      </ButtonWrap>
     </Card>
   );
 };

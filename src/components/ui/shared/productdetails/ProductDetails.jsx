@@ -8,6 +8,7 @@ import Spinner from "../../Spinner";
 import { formatCurrency } from "../../../../utils/helpers";
 import Button from "../button/Button";
 import { getItemById } from "../../../../api/apiGetItemById";
+import { useCart } from "../../../context/CartContext";
 
 const ProductDetailsWrapper = styled.div`
   padding: 2rem;
@@ -116,15 +117,17 @@ const BackButton = styled.button`
   }
 `;
 
-const ProductDetails = () => {
+const ProductDetails = ({ tableName }) => {
   const { productId } = useParams();
   const navigate = useNavigate();
   const { data, isLoading, error } = useQuery({
-    queryKey: ["product", productId],
-    queryFn: () => getItemById("authentic_african_wear", productId),
+    queryKey: ["product", tableName, productId],
+    queryFn: () => getItemById(tableName, productId),
   });
 
   const [selectedImage, setSelectedImage] = useState("");
+
+  const { dispatch } = useCart();
 
   useEffect(() => {
     if (data) {
@@ -141,6 +144,7 @@ const ProductDetails = () => {
   }
 
   const {
+    id,
     name,
     img1,
     description_header,
@@ -152,6 +156,18 @@ const ProductDetails = () => {
   } = data;
 
   const effectivePrice = discount_price ? discount_price : price;
+
+  const addToCart = () => {
+    const item = {
+      id,
+      name,
+      price: effectivePrice,
+      image: img1,
+    };
+
+    dispatch({ type: "ADD_ITEM", payload: item });
+    toast.success("Item added to cart");
+  };
 
   return (
     <ProductDetailsWrapper>
@@ -194,7 +210,7 @@ const ProductDetails = () => {
             <OriginalPrice>{formatCurrency(price)}</OriginalPrice>
           )}
         </PriceContainer>
-        <Button>Add to Cart</Button>
+        <Button onClick={addToCart}>Add to Cart</Button>
       </ProductInfo>
     </ProductDetailsWrapper>
   );

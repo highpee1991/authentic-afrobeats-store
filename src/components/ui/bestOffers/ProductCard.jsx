@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { formatCurrency } from "../../../utils/helpers";
 import Button from "../shared/button/Button";
+import AddToCartButton from "../cart/AddToCartButton";
 
 const Card = styled.div`
   border: 1px solid var(--color-brand-100);
@@ -56,6 +57,13 @@ const Price = styled.div`
   }
 `;
 
+const ButtonWrap = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+`;
+
 const ProductCard = ({ product }) => {
   const navigate = useNavigate();
 
@@ -80,9 +88,12 @@ const ProductCard = ({ product }) => {
             <span>{formatCurrency(product.price)}</span>
           )}
         </Price>
-        <Button size='small' onClick={handleViewAll}>
-          View Details
-        </Button>
+        <ButtonWrap>
+          <Button size='small' onClick={handleViewAll}>
+            View Details
+          </Button>
+          <AddToCartButton item={product} />
+        </ButtonWrap>
       </Info>
     </Card>
   );
