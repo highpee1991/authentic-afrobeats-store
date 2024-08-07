@@ -27,6 +27,11 @@ import ProductDetails from "./components/ui/shared/productdetails/ProductDetails
 import BlogDetails from "./components/ui/blog/BlogDetails";
 import Cart from "./components/ui/cart/Cart";
 import { WearsProductdetail } from "./components/ui/shared/productdetails/AllProductDetails";
+import Checkout from "./components/ui/checkout/CheckoutPage";
+import PrivateRoute from "./components/authentication/PrivateRoutes";
+import SignUp from "./components/authentication/SignUp";
+import SignIn from "./components/authentication/SignIn";
+import AuthPage from "./components/authentication/UserAuth";
 
 const App = () => {
   const queryClient = new QueryClient({
@@ -76,6 +81,11 @@ const App = () => {
             />
             <Route path='blogs/:blogId' element={<BlogDetails />} />
             <Route path='/cart' element={<Cart />} />
+            <Route path='signup' element={<SignUp />} />
+            <Route path='signin' element={<SignIn />} />
+            <Route path='userauth' element={<AuthPage />} />
+            <Route path='/checkout' element={<Checkout />} />
+
             <Route path='*' element={<PageNotFound />} />
           </Route>
         </Routes>

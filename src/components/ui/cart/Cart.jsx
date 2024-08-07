@@ -4,6 +4,7 @@ import { FaTrash } from "react-icons/fa";
 import { useCart } from "../../context/CartContext";
 import { formatCurrency } from "../../../utils/helpers";
 import { useNavigate } from "react-router-dom";
+import Button from "../shared/button/Button";
 
 const CART_STORAGE_KEY = "cartItems";
 const CART_TIMESTAMP_KEY = "cartTimestamp";
@@ -21,7 +22,7 @@ const CartContainer = styled.div`
 const CartTitle = styled.h1`
   font-size: 2rem;
   margin-bottom: 1rem;
-  color: var(--color-brand-800);
+  color: var(--color-brand-700);
 `;
 
 const CartItemsContainer = styled.div`
@@ -220,13 +221,18 @@ const Cart = () => {
     navigate(`/products/${productId}`);
   };
 
+  const handleCheckoutClick = () => {
+    navigate("/checkout");
+  };
+
   const totalPrice =
     state.items.reduce((total, item) => total + item.price * item.quantity, 0) +
     deliveryCost;
 
   return (
     <CartContainer>
-      <CartTitle>Your Cart</CartTitle>
+      <CartTitle>YOUR CART</CartTitle>
+
       <CartItemsContainer>
         {state.items.map((item) => (
           <CartItem key={item.id}>
@@ -308,6 +314,9 @@ const Cart = () => {
         <div>Total Price:</div>
         <div>{formatCurrency(totalPrice)}</div>
       </TotalPriceContainer>
+      <Button style={{ marginTop: "10px" }} onClick={handleCheckoutClick}>
+        Proceed to Checkout
+      </Button>
     </CartContainer>
   );
 };
