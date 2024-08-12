@@ -10,7 +10,7 @@ const WearsCatPreview = () => {
     isLoading: isLoadingWears,
     error,
   } = useQuery({
-    queryKey: ["africanWears"],
+    queryKey: ["WearsStyles"],
     queryFn: () => getProduct("authentic_african_wear"),
   });
 

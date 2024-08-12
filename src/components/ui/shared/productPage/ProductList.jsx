@@ -1,8 +1,14 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
 import { formatCurrency } from "../../../../utils/helpers";
 import { Link } from "react-router-dom";
 import AddToCartButton from "../../cart/AddToCartButton";
+import { FaTrash } from "react-icons/fa";
+import { FaPencil } from "react-icons/fa6";
+import { UserContext } from "../../../context/userContext";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { deleteProduct } from "../../../../api/apiDelete";
+import { toast } from "react-toastify";
 
 const Card = styled.div`
   background-color: var(--color-grey-50);
@@ -68,13 +74,55 @@ const Price = styled.div`
 `;
 
 const ButtonWrap = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   flex-wrap: wrap;
 `;
 
-const ProductList = ({ product }) => {
-  const { img1, name, price, discount_price } = product;
+const DelIcon = styled.button`
+  color: tomato;
+  cursor: pointer;
+  outline: none;
+  border: none;
+
+  &:hover {
+    color: red;
+  }
+`;
+
+const EdithIcon = styled.button`
+  color: var(--color-brand-700);
+  cursor: pointer;
+  outline: none;
+  border: none;
+
+  &:hover {
+    color: var(--color-brand-800);
+  }
+`;
+
+const ProductList = ({ product, queryClientKey, table }) => {
+  const { userRole } = useContext(UserContext);
+  const queryClient = useQueryClient();
+  const { id, img1, name, price, discount_price } = product;
+
+  const { isLoading: isDeleting, mutate } = useMutation({
+    mutationFn: (id) => deleteProduct(id, table),
+    onSuccess: () => {
+      toast.success("Product successfully deleted");
+      queryClient.invalidateQueries([queryClientKey]);
+    },
+    onError: (err) => toast.error(err.message),
+  });
+
   return (
     <Card>
+      {userRole === "admin" && (
+        <EdithIcon>
+          <FaPencil />
+        </EdithIcon>
+      )}
       <Link to={`/products/${product.id}`} key={product.id}>
         <ImageContainer>
           <img src={img1} alt={name} />
@@ -95,6 +143,11 @@ const ProductList = ({ product }) => {
       </Content>
       <ButtonWrap>
         <AddToCartButton item={product} />
+        {userRole === "admin" && (
+          <DelIcon onClick={() => mutate(id)} disabled={isDeleting}>
+            <FaTrash />
+          </DelIcon>
+        )}
       </ButtonWrap>
     </Card>
   );

@@ -209,7 +209,7 @@ const SearchContainer = styled.div`
 const SearchIconStyle = styled.div`
   cursor: pointer;
   font-size: 1.4rem;
-  padding: 1.2rem 2.4rem;
+  margin: 1.2rem 2.4rem;
   color: var(--color-grey-300);
 
   &:hover {

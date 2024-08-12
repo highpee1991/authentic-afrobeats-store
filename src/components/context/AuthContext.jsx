@@ -1,67 +1,80 @@
-// src/context/AuthContext.js
-import React, { createContext, useContext, useEffect, useState } from "react";
-import supabase from "../../api/supabase";
+// import React, { createContext, useContext, useEffect, useState } from "react";
+// import supabase from "../../api/supabase";
 
-const AuthContext = createContext();
+// const AuthContext = createContext();
 
-export const useAuth = () => useContext(AuthContext);
+// export const useAuth = () => useContext(AuthContext);
 
-export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
+// export const AuthProvider = ({ children }) => {
+//   const [user, setUser] = useState(null);
 
-  useEffect(() => {
-    const getSession = async () => {
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
-      setUser(session?.user ?? null);
-    };
+//   useEffect(() => {
+//     const getSession = async () => {
+//       const {
+//         data: { session },
+//         error,
+//       } = await supabase.auth.getSession();
+//       if (error) {
+//         console.error("Error fetching session:", error.message);
+//       }
+//       setUser(session?.user ?? null);
+//       console.log("getSession session", session);
+//     };
 
-    getSession();
+//     getSession();
 
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null);
-    });
+//     // Set up the auth state change listener
+//     const { data: authListener } = supabase.auth.onAuthStateChange(
+//       (_event, session) => {
+//         setUser(session?.user ?? null);
+//         console.log("onAuthStateChange session", session);
+//       }
+//     );
 
-    return () => {
-      subscription?.unsubscribe();
-    };
-  }, []);
+//     // Cleanup the subscription when the component unmounts
+//     return () => {
+//       if (authListener?.subscription) {
+//         authListener.subscription.unsubscribe();
+//       } else {
+//         console.warn("No valid subscription found");
+//       }
+//     };
+//   }, []);
 
-  const login = async (email, password) => {
-    const { user, error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-    if (error) throw error;
-    setUser(user);
-  };
+//   const signUp = async (email, password) => {
+//     const { data, error } = await supabase.auth.signUp({ email, password });
+//     if (error) throw error;
+//     setUser(data.user);
+//   };
 
-  const signUp = async (email, password) => {
-    const { user, error } = await supabase.auth.signUp({ email, password });
-    if (error) throw error;
-    setUser(user);
-  };
+//   const signIn = async (email, password) => {
+//     const { data, error } = await supabase.auth.signInWithPassword({
+//       email,
+//       password,
+//     });
+//     if (error) throw error;
+//     setUser(data.user);
+//   };
 
-  const loginWithGoogle = async () => {
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: "google",
-    });
-    if (error) throw error;
-  };
+//   const signInWithGoogle = async () => {
+//     const { data, error } = await supabase.auth.signInWithOAuth({
+//       provider: "google",
+//     });
+//     if (error) throw error;
+//     setUser(data.user);
+//   };
 
-  const logout = async () => {
-    await supabase.auth.signOut();
-    setUser(null);
-  };
+//   const signOut = async () => {
+//     const { error } = await supabase.auth.signOut();
+//     if (error) throw error;
+//     setUser(null);
+//   };
 
-  return (
-    <AuthContext.Provider
-      value={{ user, login, signUp, loginWithGoogle, logout }}
-    >
-      {children}
-    </AuthContext.Provider>
-  );
-};
+//   return (
+//     <AuthContext.Provider
+//       value={{ user, signUp, signIn, signInWithGoogle, signOut }}
+//     >
+//       {children}
+//     </AuthContext.Provider>
+//   );
+// };

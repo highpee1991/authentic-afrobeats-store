@@ -14,6 +14,7 @@ const AfricanWearsAndFashion = () => {
         queryKey={["WearsStyles"]}
         queryFn={() => getProduct("authentic_african_wear")}
         title='Authentic African Wears and Styles'
+        table={"authentic_african_wear"}
       />
     </PageWrapper>
   );

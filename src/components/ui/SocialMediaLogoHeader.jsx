@@ -6,10 +6,12 @@ import {
   FaTiktok,
   FaSquareGooglePlus,
 } from "react-icons/fa6";
+import UserAvatar from "../authentication/UserAvatar";
 
 const SocialIcons = styled.div`
   display: flex;
   justify-content: end;
+  align-items: center;
   gap: 0.8rem;
   background-color: var(--color-silver-700);
   padding: 0.5rem;
@@ -38,9 +40,16 @@ const IconLink = styled.a`
   }
 `;
 
+const Myaccount = styled.div`
+  color: white;
+`;
+
 const SocialMediaLogoHeader = () => {
   return (
     <SocialIcons>
+      <Myaccount>
+        <UserAvatar />
+      </Myaccount>
       <IconLink
         href='https://www.facebook.com/profile.php?id=61556320058264&mibextid=ZbWKwL'
         target='_blank'
