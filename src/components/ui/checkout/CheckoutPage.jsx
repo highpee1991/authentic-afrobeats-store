@@ -1,14 +1,16 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useCart } from "../../context/CartContext";
 import CartSummary from "./CartSummary";
 import ShippingForm from "./ShippingForm";
-import PaymentForm from "./PaymentForm";
+// import PaymentForm from "./PaymentForm";
 import OrderConfirmation from "./OrderConfirmation";
-import submitOrder from "../../../api/apiSubmitOrder";
+// import submitOrder from "../../../api/apiSubmitOrder";
 import { useNavigate } from "react-router-dom";
 import Button from "../shared/button/Button";
 import styled from "styled-components";
+import { createOrder } from "../../../api/apiCreateOrder";
+import { getCurrentUser } from "../../../api/apiAuth";
 
 // Container for checkout page
 const CheckoutContainer = styled.div`
@@ -71,7 +73,7 @@ const ToggleButton = styled.button`
 `;
 
 const CheckoutPage = () => {
-  const { state } = useCart();
+  const { state, dispatch } = useCart();
   const {
     register,
     handleSubmit,
@@ -79,9 +81,23 @@ const CheckoutPage = () => {
   } = useForm();
   const [order, setOrder] = useState(null);
   const [isCartOpen, setCartOpen] = useState(false);
+  const [userId, setUserId] = useState(null);
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const fetchUserId = async () => {
+      const user = await getCurrentUser();
+      if (user) setUserId(user.id);
+    };
+    fetchUserId();
+  }, []);
+
   const onSubmit = async (data) => {
+    if (!userId) {
+      console.error("User not logged in or user ID not found.");
+      return;
+    }
+
     const orderDetails = {
       ...data,
       items: state.items,
@@ -89,9 +105,18 @@ const CheckoutPage = () => {
         (total, item) => total + item.price * item.quantity,
         0
       ),
+      user_id: userId,
     };
-    const result = await submitOrder(orderDetails);
-    setOrder(result);
+
+    const result = await createOrder(orderDetails);
+
+    if (result.success) {
+      setOrder(result.order);
+      dispatch({ type: "CLEAR_CART" });
+    } else {
+      // Handle errors (e.g., show an error message)
+      console.error("Failed to create order:", result.error);
+    }
   };
 
   return (
@@ -109,7 +134,7 @@ const CheckoutPage = () => {
         {!order ? (
           <form onSubmit={handleSubmit(onSubmit)}>
             <ShippingForm register={register} errors={errors} />
-            <PaymentForm register={register} errors={errors} />
+            {/* <PaymentForm register={register} errors={errors} /> */}
             <Button type='submit'>Place Order</Button>
           </form>
         ) : (

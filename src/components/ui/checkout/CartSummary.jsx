@@ -25,7 +25,8 @@ const ItemList = styled.div`
 
 const Item = styled.div`
   display: flex;
-  justify-content: space-between;
+  align-items: center;
+  /* justify-content: space-between; */
   padding: 1rem 0;
   border-bottom: 1px solid #ccc;
 
@@ -37,10 +38,13 @@ const Item = styled.div`
 const ItemDetails = styled.div`
   display: flex;
   flex-direction: column;
+  margin-left: 0.7rem;
+  flex-grow: 1;
 `;
 
 const ItemName = styled.span`
   font-weight: bold;
+  text-transform: capitalize;
 `;
 
 const ItemPrice = styled.span`
@@ -52,6 +56,17 @@ const TotalPrice = styled.div`
   font-size: 1.2rem;
   display: flex;
   justify-content: space-between;
+`;
+
+const CartSummaryImage = styled.img`
+  max-width: 40px;
+  max-height: 36px;
+`;
+
+const ItemDetailsContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
 `;
 
 const CartSummary = () => {
@@ -68,13 +83,16 @@ const CartSummary = () => {
       <ItemList>
         {state.items.map((item) => (
           <Item key={item.id}>
-            <ItemDetails>
-              <ItemName>{item.name}</ItemName>
-              <ItemPrice>
-                {formatCurrency(item.price)} x {item.quantity}
-              </ItemPrice>
-            </ItemDetails>
-            <span>{formatCurrency(item.price * item.quantity)}</span>
+            <CartSummaryImage src={item.image} alt='cart item' />
+            <ItemDetailsContainer>
+              <ItemDetails>
+                <ItemName>{item.name}</ItemName>
+                <ItemPrice>
+                  {formatCurrency(item.price)} x {item.quantity}
+                </ItemPrice>
+              </ItemDetails>
+              <div>{formatCurrency(item.price * item.quantity)}</div>
+            </ItemDetailsContainer>
           </Item>
         ))}
       </ItemList>
@@ -85,5 +103,4 @@ const CartSummary = () => {
     </SummaryContainer>
   );
 };
-
 export default CartSummary;

@@ -5,10 +5,11 @@ import { useCart } from "../../context/CartContext";
 import { formatCurrency } from "../../../utils/helpers";
 import { useNavigate } from "react-router-dom";
 import Button from "../shared/button/Button";
-
-const CART_STORAGE_KEY = "cartItems";
-const CART_TIMESTAMP_KEY = "cartTimestamp";
-const CART_EXPIRATION_TIME = 30 * 60 * 1000; // 30 minutes in milliseconds
+import {
+  CART_EXPIRATION_TIME,
+  CART_STORAGE_KEY,
+  CART_TIMESTAMP_KEY,
+} from "./CartConst";
 
 const CartContainer = styled.div`
   padding: 2rem;
@@ -228,6 +229,8 @@ const Cart = () => {
   const totalPrice =
     state.items.reduce((total, item) => total + item.price * item.quantity, 0) +
     deliveryCost;
+
+  console.log("cart item", state.item);
 
   return (
     <CartContainer>

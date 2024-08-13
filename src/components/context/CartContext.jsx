@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useEffect, useReducer } from "react";
+import { CART_TIMESTAMP_KEY } from "../ui/cart/CartConst";
 
 const CartContext = createContext();
 
@@ -44,6 +45,13 @@ const cartReducer = (state, action) => {
       return {
         ...state,
         items: state.items.filter((item) => item.id !== action.payload.id),
+      };
+    case "CLEAR_CART":
+      localStorage.removeItem(CART_STORAGE_KEY);
+      localStorage.removeItem(CART_TIMESTAMP_KEY);
+      return {
+        ...state,
+        items: [],
       };
     case "SET_DELIVERY_OPTION":
       return { ...state, deliveryOption: action.payload };
